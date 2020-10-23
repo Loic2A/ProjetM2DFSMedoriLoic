@@ -78,11 +78,19 @@ public class ProductController {
     @ApiOperation(value = "Ajouter un produit", response = Product.class, tags = "ajouterProduit")
     @PostMapping(value = "/Produits")
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
-/*
 
+        Product productAdded =  productDao.save(product);
 
- */
-        return null;
+        if (productAdded == null)
+            return ResponseEntity.noContent().build();
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(productAdded.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     // supprimer un produit
@@ -113,7 +121,7 @@ public class ProductController {
     }
 
     @ApiOperation(value = "Calculer la marge d'un produit", response = Product.class, tags = "calculerMargeProduit")
-    @GetMapping(value = "calculerMargeProduit/{id}")
+    @GetMapping(value = "/calculerMargeProduit/{id}")
     public String calculerMargeProduit(@PathVariable int id) {
         int prix = productList.get(id).getPrix();
         int prixAchat = productList.get(id).getPrixAchat();

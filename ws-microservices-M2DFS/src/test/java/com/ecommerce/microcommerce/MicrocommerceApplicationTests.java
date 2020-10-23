@@ -12,5 +12,4 @@ public class MicrocommerceApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }
