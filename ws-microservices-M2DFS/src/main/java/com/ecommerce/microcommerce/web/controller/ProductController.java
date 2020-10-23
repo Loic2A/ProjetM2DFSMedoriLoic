@@ -41,12 +41,14 @@ public class ProductController {
     };
 
     //Récupérer la liste des produits en liste
+    @ApiOperation(value = "Recuperation des produits", response = Product.class, tags = "afficherListeProduit")
     @GetMapping(value = "/ListeProduits")
     public Map afficherListeProduit(){
         return productList;
     }
 
     //Récupérer la liste des produits en base de donnée
+    @ApiOperation(value = "Recuperation des produits en base de donnée", response = Product.class, tags = "listeProduits")
     @RequestMapping(value = "/Produits", method = RequestMethod.GET)
     public MappingJacksonValue listeProduits() {
         Iterable<Product> produits = productDao.findAll();
@@ -59,6 +61,7 @@ public class ProductController {
 
 
     //Récupérer un produit par son Id
+    @ApiOperation(value = "Recuperation des produits en fonction de leur Id", response = Product.class, tags = "afficherUnProduit")
     @GetMapping(value = "/afficherUnProduit/{id}")
     public Product afficherUnProduit(@PathVariable int id) {
         Product product = productList.get(id);
@@ -72,6 +75,7 @@ public class ProductController {
 
 
     //ajouter un produit
+    @ApiOperation(value = "Ajouter un produit", response = Product.class, tags = "ajouterProduit")
     @PostMapping(value = "/Produits")
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
 /*
@@ -82,6 +86,7 @@ public class ProductController {
     }
 
     // supprimer un produit
+    @ApiOperation(value = "Supprimer un produit", response = Product.class, tags = "supprimerProduit")
     @DeleteMapping(value = "/deleteProduct/{productId}")
     public ResponseEntity<Void> supprimerProduit(@PathVariable int productId) {
         System.out.println("Deleting product with ID " + productId);
@@ -93,18 +98,21 @@ public class ProductController {
     }
 
 
+    @ApiOperation(value = "Supprimer un produit", response = Product.class, tags = "supprimerProduit")
     @PutMapping(value = "/updateProduit/{id}")
     public void updateProduit(@PathVariable int id, @RequestBody Product product) {
-        /*for (Product produit : productList) {
+        List<Product> productList2 = new ArrayList<>(productList.values());
+        for (Product produit : productList2) {
             if (produit.getId() == id) {
                 produit.setId(product.getId());
                 produit.setNom(product.getNom());
                 produit.setPrix(product.getPrix());
                 produit.setPrixAchat(product.getPrixAchat());
             }
-        }*/
+        }
     }
 
+    @ApiOperation(value = "Calculer la marge d'un produit", response = Product.class, tags = "calculerMargeProduit")
     @GetMapping(value = "calculerMargeProduit/{id}")
     public String calculerMargeProduit(@PathVariable int id) {
         int prix = productList.get(id).getPrix();
@@ -125,12 +133,14 @@ public class ProductController {
     }
 
     //Ne trie que la BDD
+    @ApiOperation(value = "Trier les produits par ordre alphabetique dans la base", response = Product.class, tags = "sortProduit")
     @GetMapping(value = "/sortProduit")
     public List<Product> sortProduit() {
         return productDao.findAllByOrderByNomAsc();
     }
 
     //Pour les tests
+    @ApiOperation(value = "Test", response = Product.class, tags = "testeDeRequetes")
     @GetMapping(value = "test/produits/{prix}")
     public List<Product>  testeDeRequetes(@PathVariable int prix) {
         if(prix == 0){
