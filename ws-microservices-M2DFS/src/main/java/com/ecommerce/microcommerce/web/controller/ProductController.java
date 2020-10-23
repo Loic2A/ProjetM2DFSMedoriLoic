@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -39,6 +41,14 @@ public class ProductController {
             put(5, new Product(5, "E 5", 68, 30));
         }
     };
+
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "erreur auth"),
+            @ApiResponse(code = 403, message = "erreur accès"),
+            @ApiResponse(code = 404, message = "page pas trouvée")
+    })
 
     //Récupérer la liste des produits en liste
     @ApiOperation(value = "Recuperation des produits", response = Product.class, tags = "afficherListeProduit")
