@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -35,10 +36,10 @@ public class ProductController {
         {
 
             put(1, new Product(1, "B", 12, 12));
-            put(2, new Product(2, "A 2", 22, 15));
-            put(3, new Product(3, "Y 3", 102, 90));
-            put(4, new Product(4, "C 4", 54, 40));
-            put(5, new Product(5, "E 5", 68, 30));
+            put(2, new Product(2, "A", 22, 15));
+            put(3, new Product(3, "Y", 102, 90));
+            put(4, new Product(4, "C", 54, 40));
+            put(5, new Product(5, "E", 68, 30));
         }
     };
 
@@ -54,6 +55,7 @@ public class ProductController {
     @ApiOperation(value = "Recuperation des produits", response = Product.class, tags = "afficherListeProduit")
     @GetMapping(value = "/ListeProduits")
     public Map afficherListeProduit(){
+
         return productList;
     }
 
@@ -88,6 +90,10 @@ public class ProductController {
     @ApiOperation(value = "Ajouter un produit", response = Product.class, tags = "ajouterProduit")
     @PostMapping(value = "/Produits")
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
+
+        if(product.getPrix() == 0){
+            throw new ProduitGratuitException("Attention, produit gratuit");
+        }
 
         Product productAdded =  productDao.save(product);
 
